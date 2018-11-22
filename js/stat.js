@@ -10,6 +10,8 @@ var COLUMN_WIDTH = 40;
 var COLUMN_HEIGHT = 150;
 var COLUMN_SPACING = 50;
 
+var texts = ['Ура вы победили!', 'Список результатов:'];
+
 var renderCloud = function (ctx, x, y, color) {
   ctx.fillStyle = color;
   ctx.fillRect(x, y, CLOUD_WIDTH, CLOUD_HEIGHT);
@@ -25,44 +27,54 @@ var maxValue = function (values) {
   return maxCurrentValue;
 };
 
+var outLineByLine = function (ctx, lines, x, y, lineSpacing) {
+  for (var i = 0; i < lines.length; i++) {
+    ctx.fillText(lines[i], x, y);
+    y += lineSpacing;
+  }
+};
+
 window.renderStatistics = function (ctx, names, times) {
   renderCloud(ctx, CLOUD_X + GAP, CLOUD_Y + GAP, 'rgba(0, 0, 0, 0.7)');
   renderCloud(ctx, CLOUD_X, CLOUD_Y, '#fff');
 
   ctx.fillStyle = '#000000';
   ctx.font = '16px PT Mono';
-  ctx.fillText('Ура вы победили!', 120, 40);
-  ctx.fillText('Список результатов:', 120, 60);
+  outLineByLine(ctx, texts, 120, 40, 20);
 
   var onePercentHeightColumn = COLUMN_HEIGHT / 100;
   var onePercentMaxScorePlayer = 0; // Почему-то именно эту переменную подчеркивает редактор (Variable initializer is redundant more...)
-  var columnOffset = COLUMN_WIDTH + COLUMN_SPACING;
+  var columnOffset = 0;
   var maxScorePlayer = maxValue(times); // Найти игрока с максимальным значением
   var columnHeightPlayer = 0;
   var colorColumnPlayer = '';
   var colorBlack = '#000000';
+  var firstPlayerX = CLOUD_X + COLUMN_SPACING;
+  var firstPlayerY = CLOUD_HEIGHT - CLOUD_Y;
+  var playerX = 0;
+  var playerY = 0;
+  var columnPlayerY = 0;
 
   // Найти количество очков соответсвующее одному проценту от максимального значения
   onePercentMaxScorePlayer = maxScorePlayer / 100;
   for (var j = 0; j < names.length; j++) {
     columnHeightPlayer = Math.floor(times[j] / onePercentMaxScorePlayer * onePercentHeightColumn);
     colorColumnPlayer = (names[j] === 'Вы') ? 'rgba(255, 0, 0, 1)' : 'rgba(0, 0, 255, ' + Math.random() + ')';
+    ctx.fillStyle = colorBlack;
+    ctx.textBaseline = 'bottom';
     if (j === 0) {
-      ctx.fillStyle = colorBlack;
-      ctx.fillText(String(Math.round(times[j])), CLOUD_X + COLUMN_SPACING, CLOUD_HEIGHT - CLOUD_Y - FONT_GAP * 1.5 - columnHeightPlayer);
-      ctx.fillText(names[j], CLOUD_X + COLUMN_SPACING, CLOUD_HEIGHT - CLOUD_Y);
-
-      ctx.fillStyle = colorColumnPlayer;
-      ctx.fillRect(CLOUD_X + COLUMN_SPACING, CLOUD_HEIGHT - CLOUD_Y - FONT_GAP - columnHeightPlayer, COLUMN_WIDTH, columnHeightPlayer);
+      playerX = firstPlayerX;
     } else {
-      ctx.fillStyle = colorBlack;
-      ctx.fillText(String(Math.round(times[j])), CLOUD_X + COLUMN_SPACING + columnOffset, CLOUD_HEIGHT - CLOUD_Y - FONT_GAP * 1.5 - columnHeightPlayer);
-      ctx.fillText(names[j], CLOUD_X + COLUMN_SPACING + columnOffset, CLOUD_HEIGHT - CLOUD_Y);
-
-      ctx.fillStyle = colorColumnPlayer;
-      ctx.fillRect(CLOUD_X + COLUMN_SPACING + columnOffset, CLOUD_HEIGHT - CLOUD_Y - FONT_GAP - columnHeightPlayer, COLUMN_WIDTH, columnHeightPlayer);
       columnOffset += COLUMN_WIDTH + COLUMN_SPACING;
+      playerX = firstPlayerX + columnOffset;
     }
+    playerY = firstPlayerY;
+    columnPlayerY = firstPlayerY - FONT_GAP - columnHeightPlayer;
+    ctx.fillText(String(Math.round(times[j])), playerX, columnPlayerY);
+    ctx.textBaseline = 'alphabetic';
+    ctx.fillText(names[j], playerX, playerY);
+    ctx.fillStyle = colorColumnPlayer;
+    ctx.fillRect(playerX, columnPlayerY, COLUMN_WIDTH, columnHeightPlayer);
   }
 };
 
