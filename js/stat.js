@@ -18,8 +18,8 @@ var renderCloud = function (ctx, x, y, color) {
 };
 
 var maxValue = function (values) {
-  var maxCurrentValue = 0;
-  for (var i = 0; i < values.length; i++) {
+  var maxCurrentValue = values[0];
+  for (var i = 1; i < values.length; i++) {
     if (values[i] > maxCurrentValue) {
       maxCurrentValue = values[i];
     }
@@ -44,15 +44,13 @@ window.renderStatistics = function (ctx, names, times) {
 
   var onePercentHeightColumn = COLUMN_HEIGHT / 100;
   var onePercentMaxScorePlayer = 0; // Почему-то именно эту переменную подчеркивает редактор (Variable initializer is redundant more...)
-  var columnOffset = 0;
+  var columnOffset = COLUMN_WIDTH + COLUMN_SPACING;
   var maxScorePlayer = maxValue(times); // Найти игрока с максимальным значением
   var columnHeightPlayer = 0;
   var colorColumnPlayer = '';
   var colorBlack = '#000000';
   var firstPlayerX = CLOUD_X + COLUMN_SPACING;
   var firstPlayerY = CLOUD_HEIGHT - CLOUD_Y;
-  var playerX = 0;
-  var playerY = 0;
   var columnPlayerY = 0;
 
   // Найти количество очков соответсвующее одному проценту от максимального значения
@@ -62,19 +60,12 @@ window.renderStatistics = function (ctx, names, times) {
     colorColumnPlayer = (names[j] === 'Вы') ? 'rgba(255, 0, 0, 1)' : 'rgba(0, 0, 255, ' + Math.random() + ')';
     ctx.fillStyle = colorBlack;
     ctx.textBaseline = 'bottom';
-    if (j === 0) {
-      playerX = firstPlayerX;
-    } else {
-      columnOffset += COLUMN_WIDTH + COLUMN_SPACING;
-      playerX = firstPlayerX + columnOffset;
-    }
-    playerY = firstPlayerY;
     columnPlayerY = firstPlayerY - FONT_GAP - columnHeightPlayer;
-    ctx.fillText(String(Math.round(times[j])), playerX, columnPlayerY);
+    ctx.fillText(String(Math.round(times[j])), firstPlayerX + columnOffset * j, columnPlayerY);
     ctx.textBaseline = 'alphabetic';
-    ctx.fillText(names[j], playerX, playerY);
+    ctx.fillText(names[j], firstPlayerX + columnOffset * j, firstPlayerY);
     ctx.fillStyle = colorColumnPlayer;
-    ctx.fillRect(playerX, columnPlayerY, COLUMN_WIDTH, columnHeightPlayer);
+    ctx.fillRect(firstPlayerX + columnOffset * j, columnPlayerY, COLUMN_WIDTH, columnHeightPlayer);
   }
 };
 
