@@ -1,7 +1,14 @@
 'use strict';
 
+// Ищем окно и отображем его(убираем класс hidden)
 var setup = document.querySelector('.setup');
 setup.classList.remove('hidden');
+
+// Ищем блок, в котором будем отображать волшебников
+var similarListElement = setup.querySelector('.setup-similar-list');
+
+// Создаем шаблон для отображения волшебника
+var similarWizardTemplate = document.querySelector('#similar-wizard-template').content.querySelector('.setup-similar-item');
 
 var listWizards = [];
 var vornames = ['Иван', 'Хуан Себастьян', 'Мария', 'Кристоф', 'Виктор', 'Юлия', 'Люпита', 'Вашингтон'];
@@ -24,6 +31,25 @@ var createWizards = function (countWizards) {
   }
 };
 
+// Функция добавления данных волшебника из объекта в вёрстку
+var renderWizard = function (wizard) {
+  var wizardElement = similarWizardTemplate.cloneNode(true);
+  wizardElement.querySelector('.setup-similar-label').textContent = wizard.name;
+  wizardElement.querySelector('.wizard-coat').style.fill = wizard.coatColor;
+  wizardElement.querySelector('.wizard-eyes').style.fill = wizard.eyesColor;
+  return wizardElement;
+};
+
+// Создаем четырех разных волшебников
 createWizards(4);
 
+// Создаем фрагмент
+var fragment = document.createDocumentFragment();
+for (var j = 0; j < listWizards.length; j++) {
+  fragment.appendChild(renderWizard(listWizards[j]));
+}
+// Вставляем в разметку новые блоки с волшебниками
+similarListElement.appendChild(fragment);
+
+document.querySelector('.setup-similar').classList.remove('hidden');
 
