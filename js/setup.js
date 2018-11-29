@@ -1,8 +1,64 @@
 'use strict';
 
-// Ищем окно и отображем его(убираем класс hidden)
+// Ищем окно настроек и отображем его по нажатию на setup-open
 var setup = document.querySelector('.setup');
-setup.classList.remove('hidden');
+var setupOpen = document.querySelector('.setup-open');
+setupOpen.addEventListener('click', function () {
+  setup.classList.remove('hidden');
+});
+
+// Когда в фокусе кнопка setup-open, то по нажатию Enter запускать окно настроек
+setupOpen.addEventListener('keydown', function (evt) {
+  if (evt.keyCode === 13) {
+    setup.classList.remove('hidden');
+  }
+});
+
+// Пишем обработчик закрытия окна настроек по клику мыши
+var setupClose = setup.querySelector('.setup-close');
+setupClose.addEventListener('click', function () {
+  setup.classList.add('hidden');
+});
+
+// Обработчик закрытия окна настроек на кнопку ESC, если фокус находится в строке ввода, то не закрывать окно
+document.addEventListener('keydown', function (evt) {
+  if ((!document.activeElement.matches('.setup-user-name')) && (evt.keyCode === 27)) {
+    setup.classList.add('hidden');
+  }
+});
+
+// Если окно открыто и фокус находится на кнопке закрытия окна
+// 1. Проверить наличие фокуса на кнопке закрытия
+// 2. Проверить наличие класса hidden в элементе окна настроек, если нет, то открыто окно
+// 3. Если оба условия предыдущих совпадают и нажата клавиша Enter, то закрыть окно.
+
+setupClose.addEventListener('keydown', function (evt) {
+  if (!setup.classList.contains('hidden')) {
+    if (evt.keyCode === 13) {
+      setup.classList.add('hidden');
+    }
+  }
+});
+
+// Если диалог открыт, нажатие на кнопку «Сохранить» приводит к отправке формы
+// 1. Проверить наличие класса hidden в элементе окна настроек, если нет, то открыто окно
+// 2. При нажатии на кнопку "Сохранить" отправить форму.
+var buttonSubmit = setup.querySelector('.setup-submit');
+buttonSubmit.addEventListener('click', function (evt) {
+  evt.preventDefault();
+  if (!setup.classList.contains('hidden')) {
+    document.forms.setupWizardForms.submit();
+  }
+});
+
+// Если диалог открыт и фокус находится на кнопке «Сохранить», нажатие на ENTER приводит к отправке формы
+// 1. Перехватить Enter и проверить наличие класса hidden в элементе окна настроек, если hidden нет, то отправить форму.
+buttonSubmit.addEventListener('keydown', function (evt) {
+  evt.preventDefault();
+  if (!setup.classList.contains('hidden')) {
+    document.forms.setupWizardForms.submit();
+  }
+});
 
 // Ищем блок, в котором будем отображать волшебников
 var similarListElement = setup.querySelector('.setup-similar-list');
