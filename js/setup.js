@@ -44,21 +44,26 @@ setupClose.addEventListener('keydown', function (evt) {
 // 1. Проверить наличие класса hidden в элементе окна настроек, если нет, то открыто окно
 // 2. При нажатии на кнопку "Сохранить" отправить форму.
 var buttonSubmit = setup.querySelector('.setup-submit');
+var formWizard = setup.querySelector('.setup-wizard-form');
 buttonSubmit.addEventListener('click', function (evt) {
   evt.preventDefault();
   if (!setup.classList.contains('hidden')) {
-    document.forms.setupWizardForms.submit();
+    formWizard.submit();
   }
 });
 
 // Если диалог открыт и фокус находится на кнопке «Сохранить», нажатие на ENTER приводит к отправке формы
 // 1. Перехватить Enter и проверить наличие класса hidden в элементе окна настроек, если hidden нет, то отправить форму.
+
 buttonSubmit.addEventListener('keydown', function (evt) {
   evt.preventDefault();
   if (!setup.classList.contains('hidden')) {
-    document.forms.setupWizardForms.submit();
+    if (evt.keyCode === 13) {
+      formWizard.submit();
+    }
   }
 });
+
 
 // Ищем блок, в котором будем отображать волшебников
 var similarListElement = setup.querySelector('.setup-similar-list');
