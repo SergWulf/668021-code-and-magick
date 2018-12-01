@@ -1,5 +1,12 @@
 'use strict';
 
+var COUNT_WIZARDS = 4;
+var vornames = ['Иван', 'Хуан Себастьян', 'Мария', 'Кристоф', 'Виктор', 'Юлия', 'Люпита', 'Вашингтон'];
+var surnames = ['да Марья', 'Верон', 'Мирабелла', 'Вальц', 'Онопко', 'Топольницкая', 'Нионго', 'Ирвинг'];
+var listCoatColor = ['rgb(101, 137, 164)', 'rgb(241, 43, 107)', 'rgb(146, 100, 161)', 'rgb(56, 159, 117)', 'rgb(215, 210, 55)', 'rgb(0, 0, 0)'];
+var listEyesColor = ['black', 'red', 'blue', 'yellow', 'green'];
+var listFireballColor = ['#ee4830', '#30a8ee', '#5ce6c0', '#e848d5', '#e6e848'];
+
 // Ищем окно настроек и отображем его по нажатию на setup-open
 var setup = document.querySelector('.setup');
 var setupOpen = document.querySelector('.setup-open');
@@ -64,18 +71,28 @@ buttonSubmit.addEventListener('keydown', function (evt) {
   }
 });
 
+// Находим блоки глаз, мантии и файерболла в окне настроек
+var coatWizard = setup.querySelector('.wizard-coat');
+var eyesWizard = setup.querySelector('.wizard-eyes');
+var fireballWizard = setup.querySelector('.setup-fireball-wrap');
+
+coatWizard.addEventListener('click', function () {
+  coatWizard.style.fill = listCoatColor[randomElementOfArray(listCoatColor)];
+});
+
+fireballWizard.addEventListener('click', function () {
+  fireballWizard.style.background = listFireballColor[randomElementOfArray(listFireballColor)];
+});
+
+eyesWizard.addEventListener('click', function () {
+  eyesWizard.style.fill = listEyesColor[randomElementOfArray(listEyesColor)];
+});
 
 // Ищем блок, в котором будем отображать волшебников
 var similarListElement = setup.querySelector('.setup-similar-list');
 
 // Создаем шаблон для отображения волшебника
 var similarWizardTemplate = document.querySelector('#similar-wizard-template').content.querySelector('.setup-similar-item');
-
-var COUNT_WIZARDS = 4;
-var vornames = ['Иван', 'Хуан Себастьян', 'Мария', 'Кристоф', 'Виктор', 'Юлия', 'Люпита', 'Вашингтон'];
-var surnames = ['да Марья', 'Верон', 'Мирабелла', 'Вальц', 'Онопко', 'Топольницкая', 'Нионго', 'Ирвинг'];
-var listCoatColor = ['rgb(101, 137, 164)', 'rgb(241, 43, 107)', 'rgb(146, 100, 161)', 'rgb(56, 159, 117)', 'rgb(215, 210, 55)', 'rgb(0, 0, 0)'];
-var listEyesColor = ['black', 'red', 'blue', 'yellow', 'green'];
 
 var randomElementOfArray = function (listElements) {
   return Math.floor(Math.random() * listElements.length);
