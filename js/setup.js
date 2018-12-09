@@ -1,11 +1,13 @@
 'use strict';
 
 var COUNT_WIZARDS = 4;
+var CODE_ENTER = 13;
+var CODE_ESC = 27;
 var vornames = ['Иван', 'Хуан Себастьян', 'Мария', 'Кристоф', 'Виктор', 'Юлия', 'Люпита', 'Вашингтон'];
 var surnames = ['да Марья', 'Верон', 'Мирабелла', 'Вальц', 'Онопко', 'Топольницкая', 'Нионго', 'Ирвинг'];
-var listCoatColor = ['rgb(101, 137, 164)', 'rgb(241, 43, 107)', 'rgb(146, 100, 161)', 'rgb(56, 159, 117)', 'rgb(215, 210, 55)', 'rgb(0, 0, 0)'];
-var listEyesColor = ['black', 'red', 'blue', 'yellow', 'green'];
-var listFireballColor = ['#ee4830', '#30a8ee', '#5ce6c0', '#e848d5', '#e6e848'];
+var listCoatColors = ['rgb(101, 137, 164)', 'rgb(241, 43, 107)', 'rgb(146, 100, 161)', 'rgb(56, 159, 117)', 'rgb(215, 210, 55)', 'rgb(0, 0, 0)'];
+var listEyesColors = ['black', 'red', 'blue', 'yellow', 'green'];
+var listFireballColors = ['#ee4830', '#30a8ee', '#5ce6c0', '#e848d5', '#e6e848'];
 
 // Ищем окно настроек и отображем его по нажатию на setup-open
 var setup = document.querySelector('.setup');
@@ -16,7 +18,7 @@ setupOpen.addEventListener('click', function () {
 
 // Когда в фокусе кнопка setup-open, то по нажатию Enter запускать окно настроек
 setupOpen.addEventListener('keydown', function (evt) {
-  if (evt.keyCode === 13) {
+  if (evt.keyCode === CODE_ENTER) {
     setup.classList.remove('hidden');
   }
 });
@@ -29,7 +31,7 @@ setupClose.addEventListener('click', function () {
 
 // Обработчик закрытия окна настроек на кнопку ESC, если фокус находится в строке ввода, то не закрывать окно
 document.addEventListener('keydown', function (evt) {
-  if ((!document.activeElement.matches('.setup-user-name')) && (evt.keyCode === 27)) {
+  if ((!document.activeElement.matches('.setup-user-name')) && (evt.keyCode === CODE_ESC)) {
     setup.classList.add('hidden');
   }
 });
@@ -41,32 +43,8 @@ document.addEventListener('keydown', function (evt) {
 
 setupClose.addEventListener('keydown', function (evt) {
   if (!setup.classList.contains('hidden')) {
-    if (evt.keyCode === 13) {
+    if (evt.keyCode === CODE_ENTER) {
       setup.classList.add('hidden');
-    }
-  }
-});
-
-// Если диалог открыт, нажатие на кнопку «Сохранить» приводит к отправке формы
-// 1. Проверить наличие класса hidden в элементе окна настроек, если нет, то открыто окно
-// 2. При нажатии на кнопку "Сохранить" отправить форму.
-var buttonSubmit = setup.querySelector('.setup-submit');
-var formWizard = setup.querySelector('.setup-wizard-form');
-buttonSubmit.addEventListener('click', function (evt) {
-  evt.preventDefault();
-  if (!setup.classList.contains('hidden')) {
-    formWizard.submit();
-  }
-});
-
-// Если диалог открыт и фокус находится на кнопке «Сохранить», нажатие на ENTER приводит к отправке формы
-// 1. Перехватить Enter и проверить наличие класса hidden в элементе окна настроек, если hidden нет, то отправить форму.
-
-buttonSubmit.addEventListener('keydown', function (evt) {
-  evt.preventDefault();
-  if (!setup.classList.contains('hidden')) {
-    if (evt.keyCode === 13) {
-      formWizard.submit();
     }
   }
 });
@@ -77,15 +55,15 @@ var eyesWizard = setup.querySelector('.wizard-eyes');
 var fireballWizard = setup.querySelector('.setup-fireball-wrap');
 
 coatWizard.addEventListener('click', function () {
-  coatWizard.style.fill = listCoatColor[randomElementOfArray(listCoatColor)];
+  document.getElementsByName('coat-color')[0].value = coatWizard.style.fill = listCoatColors[randomElementOfArray(listCoatColors)];
 });
 
 fireballWizard.addEventListener('click', function () {
-  fireballWizard.style.background = listFireballColor[randomElementOfArray(listFireballColor)];
+  document.getElementsByName('fireball-color')[0].value = fireballWizard.style.background = listFireballColors[randomElementOfArray(listFireballColors)];
 });
 
 eyesWizard.addEventListener('click', function () {
-  eyesWizard.style.fill = listEyesColor[randomElementOfArray(listEyesColor)];
+  document.getElementsByName('eyes-color')[0].value = eyesWizard.style.fill = listEyesColors[randomElementOfArray(listEyesColors)];
 });
 
 // Ищем блок, в котором будем отображать волшебников
@@ -103,8 +81,8 @@ var createWizards = function (countWizards) {
   for (var i = 0; i < countWizards; i++) {
     var oldWizard = {
       name: vornames[randomElementOfArray(vornames)] + ' ' + surnames[randomElementOfArray(surnames)],
-      coatColor: listCoatColor[randomElementOfArray(listCoatColor)],
-      eyesColor: listEyesColor[randomElementOfArray(listEyesColor)]
+      coatColor: listCoatColors[randomElementOfArray(listCoatColors)],
+      eyesColor: listEyesColors[randomElementOfArray(listEyesColors)]
     };
     wizards.push(oldWizard);
   }
