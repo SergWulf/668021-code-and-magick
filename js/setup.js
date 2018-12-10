@@ -55,15 +55,21 @@ var eyesWizard = setup.querySelector('.wizard-eyes');
 var fireballWizard = setup.querySelector('.setup-fireball-wrap');
 
 coatWizard.addEventListener('click', function () {
-  document.getElementsByName('coat-color')[0].value = coatWizard.style.fill = listCoatColors[randomElementOfArray(listCoatColors)];
+  var currentCoatColor = listCoatColors[randomElementOfArray(listCoatColors)];
+  document.getElementsByName('coat-color')[0].value = currentCoatColor;
+  coatWizard.style.fill = currentCoatColor;
 });
 
 fireballWizard.addEventListener('click', function () {
-  document.getElementsByName('fireball-color')[0].value = fireballWizard.style.background = listFireballColors[randomElementOfArray(listFireballColors)];
+  var currentFireballColor = listFireballColors[randomElementOfArray(listFireballColors)];
+  document.getElementsByName('fireball-color')[0].value = currentFireballColor;
+  fireballWizard.style.background = currentFireballColor;
 });
 
 eyesWizard.addEventListener('click', function () {
-  document.getElementsByName('eyes-color')[0].value = eyesWizard.style.fill = listEyesColors[randomElementOfArray(listEyesColors)];
+  var currentEyesColor = listEyesColors[randomElementOfArray(listEyesColors)];
+  document.getElementsByName('eyes-color')[0].value = currentEyesColor;
+  eyesWizard.style.fill = currentEyesColor;
 });
 
 // Ищем блок, в котором будем отображать волшебников
