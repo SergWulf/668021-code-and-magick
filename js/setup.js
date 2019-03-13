@@ -27,6 +27,8 @@ setupOpen.addEventListener('keydown', function (evt) {
 var setupClose = setup.querySelector('.setup-close');
 setupClose.addEventListener('click', function () {
   setup.classList.add('hidden');
+  setup.style.top = 80 + 'px';
+  setup.style.left = 50 + '%';
 });
 
 // Обработчик закрытия окна настроек на кнопку ESC, если фокус находится в строке ввода, то не закрывать окно
